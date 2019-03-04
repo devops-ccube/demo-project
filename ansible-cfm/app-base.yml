@@ -1,0 +1,13 @@
+---
+# Application Base Playbook will role or configure SSH Key & Docker for both Frontend & Backend Application.
+# This Playbook is called from Packer(app-base-ami.json)
+
+- name: Install & Configure ssh-key & Docker Roles for Docker Based Application
+  hosts: all
+  become: yes
+  become_user: root
+  
+
+  roles:
+    - ssh-key
+    - docker

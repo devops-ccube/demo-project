@@ -1,0 +1,13 @@
+---
+# Bastion Playbook will role or configure SSH Key & New Relic Agent
+# This Playbook is called from Packer(bastion-ami.json)
+
+- name: Install & Configure ssh-key & NewRelic Agent Roles
+  hosts: all
+  become: yes
+  become_user: root
+  
+
+  roles:
+    - ssh-key
+    - newrelic-monitor
