@@ -11,3 +11,4 @@
   roles:
     - ssh-key
     - ansible
+    - newrelic-monitor
