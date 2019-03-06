@@ -1,0 +1,14 @@
+---
+# Ansible Playbook will role or configure SSH Key & Ansible Control Machine
+# This Playbook is called from Packer(ansible-control-ami.json)
+
+- name: Install & Configure ssh-key & Ansible Roles for Ansible Control Server
+  hosts: all
+  become: yes
+  become_user: root
+  
+
+  roles:
+    - ssh-key
+    - ansible
+    - newrelic-monitor
