@@ -53,7 +53,7 @@ Task :
 2. Ansible-Control AMI : Ritika/Aravind/Vinia/Sparsh/Revathi
 3. App Docker Base AMI : Bhupendra/Ansukh/Jacintha/Akash/Yash/Chatan
 4. Service AMI : Neha/Ravi/RaviRanjan/Shaquib/Pramod
-5. Databse AMI : Manish/Megha/Ashish/Anek/Kasi/Kondareddy/Ayyapa
+5. Databse AMI : Manish/Megha/Ashish/Anek/Kasi/Kondareddy/Ayyapa/Animesh
 6. Ansible Configuration: 
   - Roles for deploy node package - 
   - Node App Deploy Role - Manish/Megha/Ashish/Anek/Kasi/Kondareddy/Ayyapa/Bhupendra/Ansukh/Jacintha/Akash/Yash/Chatan
