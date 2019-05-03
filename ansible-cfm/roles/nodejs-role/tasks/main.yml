@@ -1,0 +1,55 @@
+---
+- name: Check if installation script exists
+  stat:
+    path: /usr/lib/apt/methods/https
+  register: apt_https_transport
+
+- name: Install HTTPS transport for APT
+  apt:
+    pkg: apt-transport-https
+    state: present
+  when: not apt_https_transport.stat.exists
+
+- name: Import the NodeSource GPG key into apt
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: Add NodeSource deb repository
+  apt_repository:
+    repo: "{{ nodejs_deb_repo }}"
+    state: present
+    update_cache: true
+
+- name: Add NodeSource deb-src repository
+  apt_repository:
+    repo: "{{ nodejs_deb_src_repo }}"
+    state: present
+    update_cache: true
+
+- name: Add NodeSource repository preferences
+  template:
+    src: etc/apt/preferences.d/deb_nodesource_com_node.pref.2
+    dest: /etc/apt/preferences.d/deb_nodesource_com_node.pref
+
+- name: Install Node.js without wildcard
+  apt:
+    name: "nodejs={{ nodejs_version }}-*"
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time | default(3600) }}"
+  when: not nodejs_version is search('\*')
+
+- name: Install Node.js with wildcard
+  apt:
+    name: "nodejs={{ nodejs_version }}"
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time | default(3600) }}"
+  when: nodejs_version is search('\*')
+
+- name: Install nodejs global packages
+  npm:
+    name: "{{ item }}"
+    global: true
+  with_items: "{{ nodejs_global_packages }}"

@@ -1,0 +1,6 @@
+---
+nodejs_branch: 8.x
+nodejs_version: "8.*"
+nodejs_global_packages: []
+nodejs_deb_repo: "deb https://deb.nodesource.com/node_{{ nodejs_branch }} {{ ansible_distribution_release }} main"
+nodejs_deb_src_repo: "deb-src https://deb.nodesource.com/node_{{ nodejs_branch }} {{ ansible_distribution_release }} main"
