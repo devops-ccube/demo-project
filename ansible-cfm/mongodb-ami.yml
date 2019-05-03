@@ -1,0 +1,14 @@
+---
+# Application Base Playbook will role or configure SSH Key & JodeJS for both Frontend & Backend Application.
+# This Playbook is called from Packer(web-ami.json)
+
+- name: Install & Configure ssh-key & NodeJS Roles for NodeJS Based Application
+  hosts: all
+  become: yes
+  become_user: root
+  
+
+  roles:
+    - ssh-key
+    - mongodb
+    - newrelic

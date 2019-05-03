@@ -10,4 +10,4 @@
 
   roles:
     - ssh-key
-    - newrelic-monitor
+    - newrelic
