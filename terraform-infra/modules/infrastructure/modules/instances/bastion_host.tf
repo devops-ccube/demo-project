@@ -18,7 +18,7 @@ resource "aws_instance" "bastion" {
 
   key_name = "${aws_key_pair.id_dummy.key_name}"
 
-  tags {
+  tags ={
     environment = "${var.environment}"
     Name = "Jumphost"
 

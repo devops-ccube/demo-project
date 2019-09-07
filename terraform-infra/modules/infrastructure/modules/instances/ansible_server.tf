@@ -18,7 +18,7 @@ resource "aws_instance" "ansible" {
 
   key_name = "${aws_key_pair.id_dummy.key_name}"
 
-  tags {
+  tags= {
     environment = "${var.environment}"
     Name = "ansible-server"
 

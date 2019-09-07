@@ -9,7 +9,7 @@ variable "public-b-subnet-id" {}
 variable "private-a-subnet-id" {}
 variable "private-b-subnet-id" {}
 
-variable "count" {
+variable "ec2-count" {
   default = 2
 }
 

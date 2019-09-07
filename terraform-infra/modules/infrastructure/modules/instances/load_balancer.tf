@@ -2,9 +2,9 @@ resource "aws_alb" "web" {
   name            = "web-${var.environment}"
   internal        = false
   security_groups = ["${aws_security_group.web-alb.id}"]
-  subnets         = ["${local.subnets_ids}"]
+  subnets         = "${local.subnets_ids}"
 
-  tags {
+  tags= {
     environment = "${var.environment}"
   }
 }
@@ -13,9 +13,9 @@ resource "aws_alb" "service" {
   name            = "service-${var.environment}"
   internal        = true
   security_groups = ["${aws_security_group.web-alb.id}"]
-  subnets         = ["${local.private_subnet}"]
+  subnets         = "${local.private_subnet}"
 
-  tags {
+  tags ={
     environment = "${var.environment}"
   }
 }
@@ -57,7 +57,7 @@ resource "aws_alb_listener" "service" {
 }
 
 resource "aws_alb_target_group_attachment" "web" {
-  count = "${var.count}"
+  count = "${var.ec2-count}"
 
   target_group_arn = "${aws_alb_target_group.web.arn}"
   target_id        = "${element(aws_instance.web.*.id, count.index)}"
@@ -65,7 +65,7 @@ resource "aws_alb_target_group_attachment" "web" {
 }
 
 resource "aws_alb_target_group_attachment" "service" {
-  count = "${var.count}"
+  count = "${var.ec2-count}"
 
   target_group_arn = "${aws_alb_target_group.service.arn}"
   target_id        = "${element(aws_instance.service.*.id, count.index)}"
