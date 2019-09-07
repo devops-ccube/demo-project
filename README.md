@@ -10,6 +10,7 @@ Prerequisite : ssh keypair(id_rsa, authorized_keys)
   - python2.7
   - ssh-key
   - ansible
+  - newrelic
   
 - Services AMI
   - ssh-key
