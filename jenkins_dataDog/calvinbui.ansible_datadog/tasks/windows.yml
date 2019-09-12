@@ -1,0 +1,23 @@
+---
+
+- name: pre-Delete temporary msi
+  win_file:
+    path: '%TEMP%\ddagent.msi'
+    state: absent
+
+- name: Download windows datadog agent
+  win_get_url:
+    url: https://s3.amazonaws.com/ddagent-windows-stable/datadog-agent-6-latest.amd64.msi
+    dest: '%TEMP%\ddagent.msi'
+    register: download_msi_result
+
+- name: Install downloaded agent
+  win_package:
+    path: "{{ download_msi_result.dest }}"
+    when: not ansible_check_mode
+
+- name: Delete temporary msi
+  win_file:
+    path: "{{ download_msi_result.dest }}"
+    state: absent
+  when: download_msi_result.status_code == 200

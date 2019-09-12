@@ -1,0 +1,15 @@
+---
+
+datadog_api_key: abc123
+
+datadog_user: dd-agent
+datadog_groups:
+  - dd-agent
+
+datadog_integrations:
+  disk.d:
+    excluded_filesystems:
+      - devtmpfs
+      - proc
+      - tmpfs
+    excluded_mountpoint_re: '/var/lib/docker/(devicemapper|overlay).*'

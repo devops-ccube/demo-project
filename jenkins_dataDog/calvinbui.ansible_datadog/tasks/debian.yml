@@ -1,0 +1,81 @@
+---
+- name: Install Datadog Agent dependencies
+  apt:
+    name:
+      - apt-transport-https
+    state: present
+  register: result
+  until: result is success
+  retries: 5
+  delay: 5
+
+- name: Add Datadog Agent GPG key
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com:80
+    id: 382E94DE
+    state: present
+  register: result
+  until: result is success
+  retries: 5
+  delay: 5
+
+- name: Add Datadog Agent Repository
+  apt_repository:
+    repo: "deb https://apt.datadoghq.com/ stable 6"
+    state: present
+    update_cache: true
+
+- name: Install Datadog Agent
+  apt:
+    name: datadog-agent
+    state: present
+  register: result
+  until: result is success
+  retries: 5
+  delay: 5
+
+- name: Check datadog-agent config file exists
+  stat:
+    path: /etc/datadog-agent/datadog.yaml
+  register: datadog_config_file_stat
+
+- name: Create datadog-agent config file
+  copy:
+    src: /etc/datadog-agent/datadog.yaml.example
+    dest: /etc/datadog-agent/datadog.yaml
+    owner: dd-agent
+    group: dd-agent
+    mode: 0640
+    remote_src: true
+  when: not datadog_config_file_stat.stat.exists
+
+- name: Add API key to datadog-agent config file
+  lineinfile:
+    path: /etc/datadog-agent/datadog.yaml
+    regexp: '^api_key: '
+    line: 'api_key: {{ datadog_api_key }}'
+    state: present
+  notify: Restart Datadog Agent
+
+- name: Add Datadog user to its groups
+  user:
+    name: "{{ datadog_user }}"
+    groups: "{{ item }}"
+    append: true
+  loop: "{{ datadog_groups }}"
+  notify: Restart Datadog Agent
+
+- name: Setup integrations
+  copy:
+    dest: "/etc/datadog-agent/conf.d/{{ item.key }}/conf.yaml"
+    content: "{{ item.value | to_nice_yaml }}"
+    owner: "{{ datadog_user }}"
+    group: "{{ datadog_user }}"
+  loop: "{{ datadog_integrations | dict2items }}"
+  notify: Restart Datadog Agent
+
+- name: Start Datadog Agent
+  service:
+    name: datadog-agent
+    state: started
+    enabled: true
