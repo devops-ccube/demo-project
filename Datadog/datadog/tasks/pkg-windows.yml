@@ -1,0 +1,41 @@
+---
+- name: Fail if Agent 5
+  fail:
+    msg: "The Datadog ansible role does not currently support Agent 5"
+  when: datadog_agent5
+
+- include_tasks: win_agent_6_latest.yml
+  when: not datadog_agent5 and (datadog_agent_version | length == 0)
+
+- include_tasks: win_agent_version.yml
+  when: not datadog_agent_version | length == 0
+
+- name: show URL var
+  debug:
+    var: dd_download_url
+
+- include_tasks: pkg-windows-opts.yml
+
+- name: pre-Delete temporary msi
+  win_file:
+    path: '%TEMP%\ddagent.msi'
+    state: absent
+
+- name: Download windows datadog agent
+  win_get_url:
+    url: "{{ dd_download_url }}"
+    dest: '%TEMP%\ddagent.msi'
+  register: download_msi_result
+
+
+- name: Install downloaded agent
+  win_package:
+    path: "{{ download_msi_result.dest }}"
+    arguments: "{{ win_install_args }}"
+  when: not ansible_check_mode
+
+- name: Delete temporary msi
+  win_file:
+    path: "{{ download_msi_result.dest }}"
+    state: absent
+  when: download_msi_result.status_code == 200
