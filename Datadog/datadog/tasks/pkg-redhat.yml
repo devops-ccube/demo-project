@@ -1,0 +1,47 @@
+---
+- name: Download new RPM key
+  get_url:
+    url: "{{ datadog_yum_gpgkey_e09422b3 }}"
+    dest: /tmp/DATADOG_RPM_KEY_E09422B3.public
+    checksum: "sha256:{{ datadog_yum_gpgkey_e09422b3_sha256sum }}"
+
+- name: Import new RPM key
+  rpm_key:
+    key: /tmp/DATADOG_RPM_KEY_E09422B3.public
+    state: present
+  when: not ansible_check_mode
+
+- name: Install DataDog yum repo
+  yum_repository:
+    name: datadog
+    description: Datadog, Inc.
+    baseurl: "{{ datadog_yum_repo }}"
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: "{{ datadog_yum_gpgkey }}"
+    state: "{% if datadog_agent5 %}absent{% else %}present{% endif %}"
+
+- name: (agent5) Install DataDog yum repo
+  yum_repository:
+    name: datadog_5
+    description: Datadog, Inc.
+    baseurl: "{{ datadog_agent5_yum_repo }}"
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: "{{ datadog_yum_gpgkey }}"
+    state: "{% if datadog_agent5 %}present{% else %}absent{% endif %}"
+
+- name: Install pinned datadog-agent package
+  yum:
+    name: "datadog-agent-{{ datadog_agent_version }}"
+    state: present
+    allow_downgrade: "{{ datadog_agent_allow_downgrade }}"
+  when: (datadog_agent_version | length != 0) and (not ansible_check_mode)
+  notify: restart datadog-agent
+
+- name: Install latest datadog-agent package
+  yum:
+    name: datadog-agent
+    update_cache: yes
+    state: latest  # noqa 403
+  when: (datadog_agent_version | length == 0) and (not ansible_check_mode)
