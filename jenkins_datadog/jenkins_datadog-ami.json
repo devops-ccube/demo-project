@@ -23,7 +23,7 @@
           },
         {
             "type": "ansible",
-            "playbook_file": "./jenkins.yml"
+            "playbook_file": "./jenkins_datadog.yml"
           }
     ]
 }
