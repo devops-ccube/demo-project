@@ -1,6 +1,6 @@
 ---
 
-datadog_api_key: 6b84ea47d6c16f073cd931575a355fbc
+datadog_api_key: DD_API_KEY
 
 datadog_user: dd-agent
 datadog_groups:
