@@ -1,5 +1,5 @@
 ---
-datadog_api_key: 7c181b2b54e9bd14fce2c4de823e4925 
+datadog_api_key: DD_API_KEY
 
 datadog_enabled: yes
 
