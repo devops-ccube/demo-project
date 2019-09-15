@@ -2,4 +2,4 @@
 nrinfraintegrations_state: "absent"
 nrinfragent_state: "latest"
 nrinfragent_config:
-  license_key: YOUR_LICENSE_KEY
+  license_key: <YOUR_Licence_Key>
