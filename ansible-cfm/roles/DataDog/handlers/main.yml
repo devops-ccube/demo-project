@@ -1,0 +1,7 @@
+---
+# handlers file for ansible-datadog
+
+- name: Restart Datadog Agent
+  service:
+    name: datadog-agent
+    state: restarted

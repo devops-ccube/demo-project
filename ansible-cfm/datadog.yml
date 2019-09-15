@@ -1,0 +1,7 @@
+---
+- name : Install & Configure Datadog for monitoring
+  hosts: all
+  become: yes
+  become_user: root
+  roles:
+    - DataDog
