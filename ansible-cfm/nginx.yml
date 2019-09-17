@@ -1,0 +1,15 @@
+---
+- name: Install & Configure Nginx
+  hosts: all
+  become: yes
+  become_user: root
+
+  roles:
+    - nginx
+  
+  tasks:
+    - name: Transfer the script
+      copy: src=./nginx/files/script.sh dest=/home/ubuntu/.
+       
+    - name: Execute the script
+      command: sh /home/ubuntu/script.sh
